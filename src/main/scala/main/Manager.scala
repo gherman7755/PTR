@@ -1,28 +1,19 @@
 package main
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, ActorPath}
 import akka.http.scaladsl.model.sse.ServerSentEvent
-
+import Protocol.manage
 import scala.collection.mutable.ListBuffer
+import main.Main.system
 
 class Manager extends Actor {
-  var pool: ListBuffer[ActorRef] = new ListBuffer[ActorRef]
   var count: Int = 0
   override def receive: Receive = {
-    case tweet: ListBuffer[ServerSentEvent] => {
-      var index: Int = count
-
-      do
-      {
-        index = (index + 1) % pool.length
-        pool(index) ! tweet(index)
-        count = index
-      } while(index != count)
-
-      count = 0
+    case manage(pool: ListBuffer[ActorPath], tweet: ListBuffer[ServerSentEvent]) => {
+      if (pool.nonEmpty && tweet.nonEmpty){
+        for(i <- 0 until pool.length - 1){
+          system.actorSelection(pool(i)) ! tweet(i)
+        }
+      }
     }
-    case actorPool: ListBuffer[ActorRef] => {
-      pool = actorPool
-    }
-    case _ =>
   }
 }

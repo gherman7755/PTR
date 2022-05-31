@@ -29,7 +29,14 @@ class Chainer extends Actor {
     send
   )
 
+  val eventSource2: EventSource = EventSource(
+    Uri("http://localhost:4000/tweets/2"),
+    send
+  )
+
   val events: Future[Done] = eventSource.runForeach(filtering)
+  val events2: Future[Done] = eventSource2.runForeach(filtering)
+
 
   override def receive: Receive = {
     case _ =>
@@ -38,12 +45,13 @@ class Chainer extends Actor {
   val count: Cancellable = system.scheduler.schedule(0 seconds, 1000 milliseconds) {
     //println(number)
     supervisor ! listOfEvents
+    Thread.sleep(20)
     listOfEvents.clear()
   }
 
   def filtering(event: ServerSentEvent): Unit =
     {
-      listOfEvents += 1
+      listOfEvents += event
       //println(pretty(render(parse(event.data))))
     }
 }
