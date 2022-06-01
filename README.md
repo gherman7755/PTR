@@ -16,9 +16,11 @@ then sent along with messages to the `Manager` at the same time.
 messages that he received from `Worker Supervisor`.  During
 the iteration, the `Manager` sends each worker its own message.
 4. After receiving the message, **worker** processes it, outputs it, and then self-deletes it.
-![Diagram](https://i.ibb.co/WtwHkNy/Check.png) 
+
+<img src="https://i.ibb.co/hKX8kjf/Edited.png" width=300>
 
 * Also, there is the Main `Supervisor` which creates
 some actors that there had been discussed above such as
-`Manager`, `Chainer` and `Worker Supervisor`.
-![Diagram](https://i.ibb.co/3Nctxp7/MainSup.png)
+`Manager`, `Chainer` and `Worker Supervisor`. 
+
+<img src="https://i.ibb.co/3Nctxp7/MainSup.png" width=300>
