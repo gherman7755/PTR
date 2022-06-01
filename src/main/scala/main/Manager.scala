@@ -8,12 +8,11 @@ import main.Main.system
 class Manager extends Actor {
   var count: Int = 0
   override def receive: Receive = {
-    case manage(pool: ListBuffer[ActorPath], tweet: ListBuffer[ServerSentEvent]) => {
-      if (pool.nonEmpty && tweet.nonEmpty){
-        for(i <- 0 until pool.length - 1){
-          system.actorSelection(pool(i)) ! tweet(i)
+    case manage(pool: ListBuffer[ActorPath], tweet: ListBuffer[ServerSentEvent]) =>
+        if (pool.nonEmpty && tweet.nonEmpty){
+          for(i <- 0 until pool.length - 1){
+            system.actorSelection(pool(i)) ! tweet(i)
+          }
         }
-      }
-    }
   }
 }

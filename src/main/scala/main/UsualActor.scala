@@ -7,7 +7,7 @@ import scala.util.Random
 
 class UsualActor extends Actor {
   override def receive: Receive = {
-    case tweet: ServerSentEvent => {
+    case tweet: ServerSentEvent =>
       Thread.sleep(Random.nextInt(450) + 50)
       val data: String = tweet.getData()
       if (data.contains(": panic")){
@@ -17,6 +17,5 @@ class UsualActor extends Actor {
         println("Message: " + data)
       }
       system.stop(self)
-    }
   }
 }
