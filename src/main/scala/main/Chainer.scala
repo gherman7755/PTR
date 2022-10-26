@@ -45,8 +45,10 @@ class Chainer extends Actor {
   val count: Cancellable = system.scheduler.schedule(0 seconds, 1000 milliseconds) {
     //println(number)
     supervisor ! listOfEvents
-    Thread.sleep(20)
+    println("Events sent to Supervisor: " + listOfEvents.length)
+    Thread.sleep(30)
     listOfEvents.clear()
+    println("[List of Events has been cleaned]")
   }
 
   def filtering(event: ServerSentEvent): Unit =

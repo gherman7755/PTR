@@ -10,12 +10,11 @@ class UsualActor extends Actor {
     case tweet: ServerSentEvent =>
       Thread.sleep(Random.nextInt(450) + 50)
       val data: String = tweet.getData()
-      if (data.contains(": panic")){
-        println("Corrupted Message")
-      }
-      else{
-        println("Message: " + data)
-      }
-      system.stop(self)
+//      if (data.contains(": panic")){
+//        println(self.path.name + " --- Corrupted Message")
+//      }
+//      else{
+//        println(self.path.name + " --- Message: " + data)
+//      }
   }
 }

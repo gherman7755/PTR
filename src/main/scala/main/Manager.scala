@@ -1,18 +1,25 @@
 package main
-import akka.actor.{Actor, ActorRef, ActorPath}
+import akka.actor.{Actor, ActorPath, ActorRef, PoisonPill}
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import Protocol.manage
+import akka.pattern.gracefulStop
+
 import scala.collection.mutable.ListBuffer
 import main.Main.system
 
+import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+
 class Manager extends Actor {
-  var count: Int = 0
   override def receive: Receive = {
-    case manage(pool: ListBuffer[ActorPath], tweet: ListBuffer[ServerSentEvent]) =>
-        if (pool.nonEmpty && tweet.nonEmpty){
-          for(i <- 0 until pool.length - 1){
-            system.actorSelection(pool(i)) ! tweet(i)
+    case manage(pool: ListBuffer[ActorPath], tweets: ListBuffer[ServerSentEvent]) =>
+        if (pool.nonEmpty && tweets.nonEmpty){
+            for(i <- tweets.indices){
+                system.actorSelection(pool(i % pool.length)) ! tweets(i)
           }
+            for(i <- pool.indices){
+                system.actorSelection(pool(i)) ! PoisonPill
+            }
         }
   }
 }
